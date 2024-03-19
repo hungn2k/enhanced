@@ -1,0 +1,152 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Test api</title>
+        <style>
+            body {
+                background-color: #DEDEDE;
+            }
+            .container {
+                padding: 10px;
+            }
+            .title {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+            }
+            .call {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+            }
+            .call input {
+                margin-left: 15px;
+                border-radius: 7px;
+            }
+            .call #api {
+                width: 250px;
+            }
+            .call button {
+                background-color: #4A8FF6;
+                height: 30px;
+                width: 100px;
+                border: 2px solid #4A8FF6;
+                border-radius: 7px;
+                color: #FFF;
+                font-weight: 600;
+            }
+            .call button:hover {
+                background-color: #83AFF0;
+            }
+
+            .show-image {
+                display: flex;
+                justify-content: center;
+            }
+            .show-image .origin{
+                width: 48%;
+                padding: 5px;
+            }
+            .show-image .enhanced {
+                width: 48%;
+                padding: 5px;
+            }
+
+            .show-image h2 {
+                display: flex;
+                justify-content: center;
+            }
+
+            .show-image .image {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .show-image .image img {
+                width: 100%;
+            }
+
+            .show-image .enhanced #loading {
+                display: none;
+                font-weight: 600;
+                font-size: 30px;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="title">Test API enhanced image</h1>
+            <div class="call">
+                <input id="api" type="text" placeholder="Enter API Url">
+                <input id="image" type="file" onchange="showImage()" accept="image/*">
+                <button onclick="fetchData()">Send</button>
+            </div>
+            <div class="show-image">
+                <div class="origin">
+                    <h2>Origin image</h2>
+                    <div class="image">
+                        <img id="origin-image" title="origin image" src="">
+                    </div>
+                </div>
+                <div class="enhanced">
+                    <h2>Enhanced image</h2>
+                    <div class="image">
+                        <img id="enhanced-image" title="enhanced image" src="">
+                    </div>
+                    <div id="loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+        <script>
+        function showImage(){
+            const photo = document.getElementById("image").files[0];
+            if (photo) {
+                const originImage = document.getElementById("origin-image");
+                originImage.src = URL.createObjectURL(photo);
+            }
+        }
+
+        function fetchData(){
+            const photo = document.getElementById("image").files[0];
+            const api = document.getElementById("api").value;
+            const enhancedImage = document.getElementById("enhanced-image");
+            const loading = document.getElementById("loading");
+
+            if (!photo) {
+                alert("Image is not null.\nPlease choise image file.");
+            }
+            else if (!api) {
+                alert("Api is not null.\nPlease enter api url.")
+            }
+            else {
+                enhancedImage.style.display = "none";
+                loading.style.display = "flex";
+                fetch(api, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
+                    body: photo
+                })
+                .then(response => response.blob())
+                .then(result => {
+                    loading.style.display = "none";
+                    enhancedImage.style.display = "block";
+                    enhancedImage.src = URL.createObjectURL(result);
+                })
+                .catch(err => {
+                    console.log(err);
+                    loading.style.display = "none";
+                    enhancedImage.style.display = "block";
+                    enhancedImage.src = "";
+                    alert("Fail API! Please check api url.");
+                });
+
+            }
+        }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,10 @@
+# shadow remove
+opencv-python==4.3.0.36
+scipy==1.4.1
+tqdm==4.64.0
+Pillow==9.1.1
+# api service
+aiohttp==3.8.1
+# client
+asyncio==3.4.3
+requests==2.27.1

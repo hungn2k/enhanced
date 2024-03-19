@@ -1,0 +1,19 @@
+version: "2.0"
+services:
+  enhanced:
+    image: enhanced:latest
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - HOST=0.0.0.0
+      - ENHANCED_WINDOW_SIZE=15
+      - ENHANCED_C1=255
+      - ENHANCED_C0=-10
+      - ENHANCED_EPSILON=0.1
+      - FILTER_NAME=fbs
+      - ENHANCED_DELTA=0.85
+      - ENHANCED_FILTER_LAMBDA=250
+      - ENHANCED_FILTER_SIGMA_XY=10
+      - ENHANCED_FILTER_SIGMA_L=50
+    command: ["python", "shadow_remove/service/app.py"]
